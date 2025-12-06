@@ -20,6 +20,8 @@ function( log_theta,
 
   # Assemble pieces
   #  NOTE:  can't use M$x and assume it's in the same order as vectors i and j in sparseMatrix(i,j)
+  
+  # O-U process
   if( isTRUE(estimate_ou) ){
     theta = exp( log_theta );
     margvar_hat = 1 / ( 2 * theta ) #
@@ -34,7 +36,10 @@ function( log_theta,
     D0_ss = AD(sparseMatrix( i = child_s, j = child_s, x = 0, dims = c(n_s,n_s) ))
     D0_ss[cbind(child_s, child_s)] = v2_s
     D_ss = D0_ss + AD(Diagonal( n_s ))
-  }else{
+  }
+  
+  # Brownian motion process
+  if( !isTRUE(estimate_ou) ){
     margvar_hat = 1
     # As theta -> 0:
     #  P_ss = 1 / ( dist * 2*theta)
@@ -272,6 +277,7 @@ function( parlist ){
   REPORT( invV_kk )
   REPORT( P_kk )
   REPORT( Qprime_kk )
+  REPORT( muprime_k )
   REPORT( loglik )
   return( -1* loglik )
 }
@@ -286,4 +292,21 @@ function( obj,
                    parameters = par_null )
   H_null = obj_null$env$spHess( random=TRUE )
   return( H_null )
+}
+
+rmvnorm_prec <-
+function( prec,
+          n = 1,
+          mu = rep(0,nrow(prec)) ) {
+
+  # Simulate values
+  z0 = matrix( rnorm(length(mu) * n), ncol=n)
+
+  # Q = t(P) * L * t(L) * P
+  L = Matrix::Cholesky(prec, super=TRUE)
+
+  # Calculate t(P) * solve(t(L)) * z0 in two steps
+  z = Matrix::solve(L, z0, system = "Lt") # z = Lt^-1 * z
+  z = Matrix::solve(L, z, system = "Pt") # z = Pt    * z
+  return(mu + as.matrix(z))
 }

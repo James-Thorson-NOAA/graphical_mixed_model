@@ -1,5 +1,5 @@
 
-root_dir = R'(C:\Users\James.Thorson\Desktop\Git\GGMM)'
+root_dir = R'(C:\Users\James.Thorson\Desktop\Git\graphical_mixed_model)'
 
 #
 Date = Sys.Date()
