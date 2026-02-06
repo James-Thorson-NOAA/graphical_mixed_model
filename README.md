@@ -1,6 +1,8 @@
 # Code and data to reproduce results from Thorson (2025)
 
-Thorson, J. T. (2025). Generalized graphical mixed models connect ecological theory with widely used statistical models. EcoEvoRxiv. https://doi.org/10.32942/X2963M
+Thorson, J. T. (2025). Generalized graphical mixed models connect ecological theory with widely used statistical models. Methods in Ecology and Evolution.
+
+Preprint:  EcoEvoRxiv. https://doi.org/10.32942/X2963M
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15634143.svg)](https://doi.org/10.5281/zenodo.15634143)
 
