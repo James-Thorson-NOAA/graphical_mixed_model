@@ -72,7 +72,7 @@ g4 <- graph_from_literal(
 )
 coords4 = layout_(g4, with_sugiyama())
 
-png( file.path(run_dir,"graph_examples.png"), width = 4, height = 8, res = 200, units="in" )
+png( file.path(run_dir,"Fig_2_graph_examples.png"), width = 4, height = 8, res = 600, units="in" )
   par( mfrow = c(4,2), mar=c(0,4,4,0), mgp = c(1.75, 0.25, 0), tck=-0.02, oma = c(1,0,0,0) )
   for( g_i in 1:4 ){
     graph = list( g1, g2, g3, g4 )[[g_i]]
