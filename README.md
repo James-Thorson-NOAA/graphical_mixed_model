@@ -4,7 +4,7 @@ Thorson, J. T. (2025). Generalized graphical mixed models connect ecological the
 
 Preprint:  EcoEvoRxiv. https://doi.org/10.32942/X2963M
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15634143.svg)](https://doi.org/10.5281/zenodo.15634143)
+[![DOI](https://zenodo.org/badge/983085446.svg)](https://doi.org/10.5281/zenodo.15634142)
 
 # Contents
 
