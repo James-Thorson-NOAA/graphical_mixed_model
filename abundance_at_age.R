@@ -1,16 +1,20 @@
 
 # devtools::install_local( R'(C:\Users\James.Thorson\Desktop\Git\tinyVAST)', force = TRUE, dep = FALSE )
-root_dir = R'(C:\Users\James.Thorson\Desktop\Git\GGMM)'
+root_dir = R'(C:\Users\James.Thorson\Desktop\Git\graphical_mixed_model)'
 data_dir = file.path(root_dir, "data" )
 
 library(tinyVAST)
 library(cv)
+library(viridisLite)
+library(ggplot2)
 
 dataset = c( "ages", "lengths" )[1]
 
 Date = Sys.Date()
 date_dir = file.path(root_dir, Date )
   dir.create( date_dir )
+
+set.seed(123)
 
 #######################
 # LENGTHS
@@ -107,7 +111,8 @@ Table_S1[,3] = sapply( Table_S1[,3], FUN = round, digits = 3 )
 Table_S1[,5:6] = sapply( Table_S1[,5:6], FUN = round, digits = 1 )
 write.csv( Table_S1, file = file.path(date_dir,"Table_S1.csv") )
 
-if(dataset=="ages") which_best = 6
+#
+which_best = which.min(Table_S1$RMSE)
 
 #
 make_matrix = function( dimnames ){matrix(NA, nrow=length(dimnames[[1]]), ncol=length(dimnames[[2]]), dimnames=dimnames)}
@@ -148,7 +153,19 @@ for( z in seq_along(drop_years) ){
   newdata[which_rows,'p_cv'] = predict( fit_z, newdata = newdata[which_rows,] )
 }
 
-library(viridisLite)
+full = merge( long, newdata, all = TRUE )
+full$bin = as.numeric(gsub( as.character(full$bin), pattern = "bin_", replace = "" ))
+ggplot( full ) +
+  geom_point( aes(x = bin, y = prop) ) +
+  facet_wrap( vars(year) ) +
+  geom_line( aes(x = bin, y = phat, group = year) ) +
+  geom_line( aes(x = bin, y = p_cv, group = year), col = "red" ) +
+  scale_x_continuous( ) +
+  theme(panel.border = element_rect(color = "black", fill = NA),
+       panel.background = element_blank(),
+       panel.grid = element_blank(),
+       panel.spacing.x = unit(0,"line"))
+ggsave( file.path(date_dir,paste0(dataset,"_results.png")), width = 6, height = 6, dpi = 600 )
 
 if( (names(mods)[which_best] == "cohort_year") & (dataset == "ages") ){
   library(igraph)
@@ -167,7 +184,7 @@ if( (names(mods)[which_best] == "cohort_year") & (dataset == "ages") ){
   coords = layout_(pg, with_sugiyama())
   coords$layout = cbind( x = c(0,1,1), y = c(0,1,0) )
 
-  png( file = file.path(date_dir,"abundance_at_age_results.png"), width = 4, height = 6, res = 200, units = "in")
+  png( file = file.path(date_dir,"abundance_at_age_results.png"), width = 4, height = 6, res = 600, units = "in")
     par( mfrow=c(3,1), mar=c(0,0,2,1), mgp = c(1.5,0.25,0), tck=-0.02, oma = c(3,3,0,0) )
 
     plot( pg, layout = coords, vertex.color = "white", vertex.frame.color = NA,
@@ -194,19 +211,4 @@ if( (names(mods)[which_best] == "cohort_year") & (dataset == "ages") ){
   dev.off()
 }
 
-
-library(ggplot2)
-full = merge( long, newdata, all = TRUE )
-full$bin = as.numeric(gsub( as.character(full$bin), pattern = "bin_", replace = "" ))
-ggplot( full ) +
-  geom_point( aes(x = bin, y = prop) ) +
-  facet_wrap( vars(year) ) +
-  geom_line( aes(x = bin, y = phat, group = year) ) +
-  geom_line( aes(x = bin, y = p_cv, group = year), col = "red" ) +
-  scale_x_continuous( ) +
-  theme(panel.border = element_rect(color = "black", fill = NA),
-       panel.background = element_blank(),
-       panel.grid = element_blank(),
-       panel.spacing.x = unit(0,"line"))
-ggsave( file.path(date_dir,paste0(dataset,"_results.png")), width = 6, height = 6)
 

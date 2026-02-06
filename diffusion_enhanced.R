@@ -1,7 +1,5 @@
 
-# FROM:  SDSEM_2025-04-18.R
-
-root_dir = R'(C:\Users\James.Thorson\Desktop\Git\GGMM)'
+root_dir = R'(C:\Users\James.Thorson\Desktop\Git\graphical_mixed_model)'
 
 #
 Date = Sys.Date()
@@ -36,7 +34,7 @@ extrap = st_make_grid( extrap, cellsize=c(size,size) / 10 )
 extrap_locs = st_coordinates(st_centroid(extrap))
 
 # Make plot of simulation
-png( file=file.path(run_dir,"diffusion.png"), width=7, height=6, res=200, units="in" )
+png( file=file.path(run_dir,"diffusion.png"), width=7, height=6, res=600, units="in" )
   par( mfrow=c(3,4), mar=c(0,0,0,0), mgp=c(2,0.5,0), tck=-0.02, oma=c(0,3,2,0) )
   for(row_index in 1:3){
 

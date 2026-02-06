@@ -171,7 +171,7 @@ pg <- graph_from_data_frame( d = DF,
                              directed = TRUE,
                              vertices = data.frame(variables) )
 
-png( file = file.path(run_dir,"traits.png"), width=4, height = 5, res = 200, units = "in")
+png( file = file.path(run_dir,"traits.png"), width=4, height = 5, res = 600, units = "in")
   par( mfrow = c(2,1), mar=c(0,2.5,1,0.5), mgp = c(1.5,0.25,0), tck = -0.02, oma = c(3,0,0,0) )
 
   # Panel-1
@@ -282,7 +282,7 @@ for( p_i in seq_along(p_set) ){
     phy = tree,
     model = "OUrandomRoot"
   )
-  lntheta_rpjmz[r_i,p_i,,'phylolm','est'] = log(c( plm1$optpar, plm2$optpar, plm3$optpar ))
+  lntheta_rpjmz[r_i,p_i,,'PLM','est'] = log(c( plm1$optpar, plm2$optpar, plm3$optpar ))
 
   #
   true_r = array(ysim_k,dim=dim(y_sj))[ match(rownames(data),rownames(y_sj)), ]
@@ -333,13 +333,13 @@ g4 = ggplot(df4) +
   facet_grid( vars(var) )
 
 g5 = grid.arrange( arrangeGrob(g3, g4, ncol=2) )
-ggsave( g5, file = file.path(run_dir,"simulation.png"), width = 8, height = 5 )
+ggsave( g5, file = file.path(run_dir,"simulation.png"), width = 8, height = 5, dpi = 600 )
 
 # Plot together
 g6 = ggplot(df3) + 
   geom_bar( aes(y = RMSE, x = missing, col = model, fill = model), stat = "identity", position = "dodge" ) +   # , position=position_dodge(0.1)
   facet_grid( cols = vars(var), rows = vars(value), scale = "free_y" )
-ggsave( g6, file = file.path(run_dir,"errors.png"), width = 6, height = 3 )
+ggsave( g6, file = file.path(run_dir,"errors.png"), width = 6, height = 3, dpi = 600 )
 
 #
 df5 = expand.grid( dimnames(rmse_rpjz) )
@@ -351,7 +351,7 @@ g7 = ggplot(df7) +
   geom_violin( aes(x=missing, y = Error, fill = model, col = model) ) + 
   facet_grid( rows = vars(value), cols = vars(var), scale = "free_y" )+ 
   theme_minimal()
-ggsave( g7, file = file.path(run_dir,"errors_violins.png"), width = 6, height = 3 )
+ggsave( g7, file = file.path(run_dir,"errors_violins.png"), width = 6, height = 3, dpi = 600 )
 
 #
 #zmax = dnorm(0) * 0.5 * 200
@@ -363,4 +363,4 @@ g8 = ggplot() +
   facet_grid( rows = vars(var), cols = vars(missing) ) + 
   geom_line( data = df7, aes(x = z, y = height) ) +
   labs(y = "Count of simulation replicates")
-ggsave( g8, file = file.path(run_dir,"zvalue_histograms.png"), width = 6, height = 4 )
+ggsave( g8, file = file.path(run_dir,"zvalue_histograms.png"), width = 6, height = 4, dpi = 600 )
